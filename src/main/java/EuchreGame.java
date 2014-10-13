@@ -32,14 +32,16 @@ public class EuchreGame extends JComponent {
         g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
         for (int i = 0; i < 5; i++) {
-            drawCard(g, 200 + (CARD_WIDTH + 10) * i, GAME_HEIGHT - CARD_HEIGHT - 30);
+            drawCard(g, 200 + (CARD_WIDTH + 10) * i, GAME_HEIGHT - CARD_HEIGHT - 30, Character.toString((char) ('A' + i)));
         }
     }
 
-    private void drawCard(Graphics g, int x, int y) {
+    private void drawCard(Graphics g, int x, int y, String letter) {
         g.setColor(CARD_FILL);
         g.fillRoundRect(x, y, CARD_WIDTH, CARD_HEIGHT, CARD_CORNER, CARD_CORNER);
         g.setColor(CARD_BORDER);
         g.drawRoundRect(x, y, CARD_WIDTH, CARD_HEIGHT, CARD_CORNER, CARD_CORNER);
+        g.setFont(new Font(Font.SERIF, Font.PLAIN, 42));
+        g.drawString(letter, x + CARD_WIDTH / 2 - 15, y + CARD_HEIGHT / 2 + 15);
     }
 }
