@@ -31,17 +31,41 @@ public class EuchreGame extends JComponent {
         g.setColor(TABLE_COLOR);
         g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
+        // Main player's cards
         for (int i = 0; i < 5; i++) {
-            drawCard(g, 200 + (CARD_WIDTH + 10) * i, GAME_HEIGHT - CARD_HEIGHT - 30, Character.toString((char) ('A' + i)));
+            drawCardFront(g, 200 + (CARD_WIDTH + 10) * i, GAME_HEIGHT - CARD_HEIGHT - 30, Character.toString((char) ('A' + i)));
+        }
+
+        // Opponent 1's cards
+        for (int i = 0; i < 5; i++) {
+            drawCardBack(g, 30 + (CARD_WIDTH / 2) * i, (GAME_HEIGHT - CARD_HEIGHT) / 2);
+        }
+
+        // Opponent 2's card
+        for (int i = 0; i < 5; i++) {
+            drawCardBack(g, 300 + (CARD_WIDTH / 2) * i, 30);
+        }
+
+        // Opponent 3's cards
+        for (int i = 0; i < 5; i++) {
+            drawCardBack(g, GAME_WIDTH - 30 - CARD_WIDTH * 3 + (CARD_WIDTH / 2) * i, (GAME_HEIGHT - CARD_HEIGHT) / 2);
         }
     }
 
-    private void drawCard(Graphics g, int x, int y, String letter) {
+    private void drawCardBack(Graphics g, int x, int y) {
+        drawCardFrame(g, x, y);
+    }
+
+    private void drawCardFront(Graphics g, int x, int y, String letter) {
+        drawCardFrame(g, x, y);
+        g.setFont(new Font(Font.SERIF, Font.PLAIN, 42));
+        g.drawString(letter, x + CARD_WIDTH / 2 - 15, y + CARD_HEIGHT / 2 + 15);
+    }
+
+    private void drawCardFrame(Graphics g, int x, int y) {
         g.setColor(CARD_FILL);
         g.fillRoundRect(x, y, CARD_WIDTH, CARD_HEIGHT, CARD_CORNER, CARD_CORNER);
         g.setColor(CARD_BORDER);
         g.drawRoundRect(x, y, CARD_WIDTH, CARD_HEIGHT, CARD_CORNER, CARD_CORNER);
-        g.setFont(new Font(Font.SERIF, Font.PLAIN, 42));
-        g.drawString(letter, x + CARD_WIDTH / 2 - 15, y + CARD_HEIGHT / 2 + 15);
     }
 }
