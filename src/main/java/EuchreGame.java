@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
-public class EuchreGame extends JComponent {
+public class EuchreGame extends JComponent implements MouseMotionListener {
 
     public static final Color TABLE_COLOR = new Color(204, 185, 159);
     public static final int CARD_CORNER = 7;
@@ -11,14 +13,18 @@ public class EuchreGame extends JComponent {
     public static final Color CARD_BORDER = new Color(40, 38, 35);
     public static final int GAME_WIDTH = 800;
     public static final int GAME_HEIGHT = 600;
+    private int highlightedCard = -1;
 
     public static void main(String[] args) {
         JFrame window = new JFrame("Euchre");
-        window.add(new EuchreGame());
+        EuchreGame game = new EuchreGame();
+        window.add(game);
         window.pack();
         window.setLocationRelativeTo(null);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);
+
+        window.addMouseMotionListener(game);
     }
 
     @Override
@@ -33,7 +39,8 @@ public class EuchreGame extends JComponent {
 
         // Main player's cards
         for (int i = 0; i < 5; i++) {
-            drawCardFront(g, 200 + (CARD_WIDTH + 10) * i, GAME_HEIGHT - CARD_HEIGHT - 30, Character.toString((char) ('A' + i)));
+            boolean highlighted = (highlightedCard == i);
+            drawCardFront(g, xForPlayersCard(i), yForPlayersCard(), Character.toString((char) ('A' + i)), highlighted);
         }
 
         // Opponent 1's cards
@@ -52,20 +59,50 @@ public class EuchreGame extends JComponent {
         }
     }
 
-    private void drawCardBack(Graphics g, int x, int y) {
-        drawCardFrame(g, x, y);
+    private int yForPlayersCard() {
+        return GAME_HEIGHT - CARD_HEIGHT - 30;
     }
 
-    private void drawCardFront(Graphics g, int x, int y, String letter) {
-        drawCardFrame(g, x, y);
+    private int xForPlayersCard(int i) {
+        return 200 + (CARD_WIDTH + 10) * i;
+    }
+
+    private void drawCardBack(Graphics g, int x, int y) {
+        drawCardFrame(g, x, y, false);
+    }
+
+    private void drawCardFront(Graphics g, int x, int y, String letter, boolean highlighted) {
+        drawCardFrame(g, x, y, highlighted);
         g.setFont(new Font(Font.SERIF, Font.PLAIN, 42));
         g.drawString(letter, x + CARD_WIDTH / 2 - 15, y + CARD_HEIGHT / 2 + 15);
     }
 
-    private void drawCardFrame(Graphics g, int x, int y) {
-        g.setColor(CARD_FILL);
+    private void drawCardFrame(Graphics g, int x, int y, boolean highlighted) {
+        if (highlighted) {
+            g.setColor(new Color(240, 200, 0));
+        } else {
+            g.setColor(CARD_FILL);
+        }
         g.fillRoundRect(x, y, CARD_WIDTH, CARD_HEIGHT, CARD_CORNER, CARD_CORNER);
         g.setColor(CARD_BORDER);
         g.drawRoundRect(x, y, CARD_WIDTH, CARD_HEIGHT, CARD_CORNER, CARD_CORNER);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        highlightedCard = -1;
+        for (int i = 0; i < 5; i++) {
+            if (e.getX() >= xForPlayersCard(i)
+                    && e.getX() <= xForPlayersCard(i) + CARD_WIDTH
+                    && e.getY() >= yForPlayersCard()) {
+                highlightedCard = i;
+            }
+        }
+        repaint();
     }
 }
