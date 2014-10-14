@@ -1,10 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
-public class EuchreGame extends JComponent implements MouseMotionListener, MouseListener {
+public class EuchreGame extends JComponent implements MouseMotionListener, MouseListener, ActionListener {
 
     public static final Color TABLE_COLOR = new Color(204, 185, 159);
     public static final int CARD_CORNER = 7;
@@ -29,6 +27,8 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
 
         window.addMouseMotionListener(game);
         window.addMouseListener(game);
+
+        new Timer(1000, game).start();
     }
 
     @Override
@@ -48,17 +48,17 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
         }
 
         // Opponent 1's cards
-        for (int i = 0; i < gameModel.player2Cards; i++) {
+        for (int i = 0; i < gameModel.player2Cards.size(); i++) {
             drawCardBack(g, 30 + (CARD_WIDTH / 2) * i, (GAME_HEIGHT - CARD_HEIGHT) / 2);
         }
 
         // Opponent 2's card
-        for (int i = 0; i < gameModel.player3Cards; i++) {
+        for (int i = 0; i < gameModel.player3Cards.size(); i++) {
             drawCardBack(g, 300 + (CARD_WIDTH / 2) * i, 30);
         }
 
         // Opponent 3's cards
-        for (int i = 0; i < gameModel.player4Cards; i++) {
+        for (int i = 0; i < gameModel.player4Cards.size(); i++) {
             drawCardBack(g, GAME_WIDTH - 30 - CARD_WIDTH * 3 + (CARD_WIDTH / 2) * i, (GAME_HEIGHT - CARD_HEIGHT) / 2);
         }
 
@@ -153,5 +153,29 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (gameModel.playedCards[0] == null) {
+            // waiting for player
+            return;
+        } else if (gameModel.playedCards[1] == null) {
+            gameModel.playedCards[1] = gameModel.player2Cards.get(0);
+            gameModel.player2Cards.remove(0);
+        } else if (gameModel.playedCards[2] == null) {
+            gameModel.playedCards[2] = gameModel.player3Cards.get(0);
+            gameModel.player3Cards.remove(0);
+        } else if (gameModel.playedCards[3] == null) {
+            gameModel.playedCards[3] = gameModel.player4Cards.get(0);
+            gameModel.player4Cards.remove(0);
+        } else {
+            // the round is over
+            gameModel.playedCards[0] = null;
+            gameModel.playedCards[1] = null;
+            gameModel.playedCards[2] = null;
+            gameModel.playedCards[3] = null;
+        }
+        repaint();
     }
 }
