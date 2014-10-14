@@ -64,10 +64,18 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
 
         int centerX = (GAME_WIDTH - CARD_WIDTH) / 2;
         int centerY = (GAME_HEIGHT - CARD_HEIGHT) / 2;
-        drawCardFront(g, centerX, centerY + CARD_HEIGHT * 3 / 4, "1", false);
-        drawCardFront(g, centerX - CARD_WIDTH - 10, centerY, "2", false);
-        drawCardFront(g, centerX, centerY - CARD_HEIGHT * 3 / 4, "3", false);
-        drawCardFront(g, centerX + CARD_WIDTH + 10, centerY, "4", false);
+        if (gameModel.playedCards[0] != null) {
+            drawCardFront(g, centerX, centerY + CARD_HEIGHT * 3 / 4, gameModel.playedCards[0], false);
+        }
+        if (gameModel.playedCards[1] != null) {
+            drawCardFront(g, centerX - CARD_WIDTH - 10, centerY, gameModel.playedCards[1], false);
+        }
+        if (gameModel.playedCards[2] != null) {
+            drawCardFront(g, centerX, centerY - CARD_HEIGHT * 3 / 4, gameModel.playedCards[2], false);
+        }
+        if (gameModel.playedCards[3] != null) {
+            drawCardFront(g, centerX + CARD_WIDTH + 10, centerY, gameModel.playedCards[3], false);
+        }
     }
 
     private int yForPlayersCard() {
