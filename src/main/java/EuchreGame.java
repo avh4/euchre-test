@@ -115,7 +115,7 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
     @Override
     public void mouseMoved(MouseEvent e) {
         highlightedCard = -1;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < gameModel.myCards.size(); i++) {
             if (e.getX() >= xForPlayersCard(i)
                     && e.getX() <= xForPlayersCard(i) + CARD_WIDTH
                     && e.getY() >= yForPlayersCard()) {
@@ -128,8 +128,11 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
     @Override
     public void mouseClicked(MouseEvent e) {
         if (highlightedCard != -1) {
-
+            gameModel.playedCards[0] = gameModel.myCards.get(highlightedCard);
+            gameModel.myCards.remove(highlightedCard);
+            highlightedCard = -1;
         }
+        repaint();
     }
 
     @Override
