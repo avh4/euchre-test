@@ -1,9 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class EuchreGame extends JComponent implements MouseMotionListener {
+public class EuchreGame extends JComponent implements MouseMotionListener, MouseListener {
 
     public static final Color TABLE_COLOR = new Color(204, 185, 159);
     public static final int CARD_CORNER = 7;
@@ -15,6 +16,8 @@ public class EuchreGame extends JComponent implements MouseMotionListener {
     public static final int GAME_HEIGHT = 600;
     private int highlightedCard = -1;
 
+    public GameModel gameModel = new GameModel();
+
     public static void main(String[] args) {
         JFrame window = new JFrame("Euchre");
         EuchreGame game = new EuchreGame();
@@ -25,6 +28,7 @@ public class EuchreGame extends JComponent implements MouseMotionListener {
         window.setVisible(true);
 
         window.addMouseMotionListener(game);
+        window.addMouseListener(game);
     }
 
     @Override
@@ -38,23 +42,23 @@ public class EuchreGame extends JComponent implements MouseMotionListener {
         g.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
         // Main player's cards
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < gameModel.myCards.size(); i++) {
             boolean highlighted = (highlightedCard == i);
-            drawCardFront(g, xForPlayersCard(i), yForPlayersCard(), Character.toString((char) ('A' + i)), highlighted);
+            drawCardFront(g, xForPlayersCard(i), yForPlayersCard(), gameModel.myCards.get(i), highlighted);
         }
 
         // Opponent 1's cards
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < gameModel.player2Cards; i++) {
             drawCardBack(g, 30 + (CARD_WIDTH / 2) * i, (GAME_HEIGHT - CARD_HEIGHT) / 2);
         }
 
         // Opponent 2's card
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < gameModel.player3Cards; i++) {
             drawCardBack(g, 300 + (CARD_WIDTH / 2) * i, 30);
         }
 
         // Opponent 3's cards
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < gameModel.player4Cards; i++) {
             drawCardBack(g, GAME_WIDTH - 30 - CARD_WIDTH * 3 + (CARD_WIDTH / 2) * i, (GAME_HEIGHT - CARD_HEIGHT) / 2);
         }
     }
@@ -104,5 +108,32 @@ public class EuchreGame extends JComponent implements MouseMotionListener {
             }
         }
         repaint();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (highlightedCard != -1) {
+
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
