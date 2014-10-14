@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class EuchreGame extends JComponent implements MouseMotionListener, MouseListener, ActionListener {
 
@@ -44,6 +45,12 @@ public class EuchreGame extends JComponent implements MouseMotionListener, Mouse
         deck.add(makeCard("S", ORANGE_SUIT));
         deck.add(makeCard("X", ORANGE_SUIT));
         deck.add(makeCard("Z", ORANGE_SUIT));
+
+        Random r = new Random();
+        for (int i = 0; i < 1000; i++) {
+            int n = r.nextInt(deck.size());
+            deck.add(deck.remove(n));
+        }
 
         for (int i = 0; i < 5; i++) {
             gameModel.myCards.add(deck.remove(0));
